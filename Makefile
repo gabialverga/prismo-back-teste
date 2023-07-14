@@ -10,4 +10,5 @@ logs:
 	docker compose -f ${COMPOSE_FILE} logs $(s) -f
 down:
 	docker compose -f ${COMPOSE_FILE} down
-
+exec:
+	docker compose exec $(s) sh
