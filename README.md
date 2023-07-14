@@ -23,6 +23,7 @@ Aqui esta o passo a passo de como fazer o deploy da aplicação:
     - **MYSQL_PASSWORD**: Senha do usuário da base de dados.
     - **MYSQL_DATABASE**: Nome da base de dados.
     - **MYSQL_ROOT_PASSWORD**: Senha da base de dados.
+    - **DATABASE_URL**: URL de acesso ao banco de dados.
 
 2.  Build
 
