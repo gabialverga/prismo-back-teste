@@ -38,25 +38,29 @@ Aqui esta o passo a passo de como fazer o deploy da aplicação:
     
 ### Comandos extras
 
-- Iniciar apenas um serviço
+- **Iniciar apenas um serviço**
+
     Pode receber os valores de 'db' ou 'back'
   ```
   make up s=<nome>
   ```
 
-- Ver logs dos containers 
+- **Ver logs dos containers** 
+
     Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
   ```
   make logs s=<nome>
   ```
 
-- Parar um container
+- **Parar um container**
+
     Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
   ```
   make down s=<nome>
   ```
 
-- Acessar um container
+- **Acessar um container**
+
     Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
   ```
   make exec s=<nome>
