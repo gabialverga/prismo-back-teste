@@ -14,8 +14,9 @@ import (
 )
 
 type Account struct {
-	ID             int    `json:"id"`
-	DocumentNumber string `json:"document_number"`
+	ID             int     `json:"id"`
+	Limit          float64 `json:"avaliable_credit_limit"`
+	DocumentNumber string  `json:"document_number"`
 }
 
 type Transaction struct {
@@ -52,19 +53,18 @@ func main() {
 func createAccount(w http.ResponseWriter, r *http.Request) {
 	var account Account
 	err := json.NewDecoder(r.Body).Decode(&account)
+	fmt.Println(account)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// Inserir a nova conta no banco de dados
-	result, err := db.Exec("INSERT INTO accounts (document_number) VALUES (?)", account.DocumentNumber)
+	result, err := db.Exec("INSERT INTO accounts (document_number, avaliable_credit_limit) VALUES (?, ?)", account.DocumentNumber, account.Limit)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// Obter o ID da conta inserida
 	accountID, err := result.LastInsertId()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -87,7 +87,7 @@ func getAccountByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var account Account
-	err = db.QueryRow("SELECT * FROM accounts WHERE account_id = ?", accountID).Scan(&account.ID, &account.DocumentNumber)
+	err = db.QueryRow("SELECT * FROM accounts WHERE account_id = ?", accountID).Scan(&account.ID, &account.DocumentNumber, &account.Limit)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			http.NotFound(w, r)
@@ -103,13 +103,35 @@ func getAccountByID(w http.ResponseWriter, r *http.Request) {
 
 func createTransaction(w http.ResponseWriter, r *http.Request) {
 	var transaction Transaction
+	var account Account
+
 	err := json.NewDecoder(r.Body).Decode(&transaction)
+
+	if transaction.OperationTypeID != 4 {
+		transaction.Amount = -1 * transaction.Amount
+	}
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	err = db.QueryRow("SELECT * FROM accounts WHERE account_id = ?", transaction.AccountID).Scan(&account.ID, &account.DocumentNumber, &account.Limit)
+	if account.Limit+transaction.Amount >= 0 {
+		_, err = db.Exec("INSERT INTO transactions (account_id, operationType_ID, amount) VALUES (?, ?, ?)", transaction.AccountID, transaction.OperationTypeID, transaction.Amount)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		_, err = db.Exec("UPDATE accounts SET avaliable_credit_limit = ? WHERE account_id = ?", account.Limit+transaction.Amount, transaction.AccountID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		http.Error(w, "Limite não disponivel", http.StatusBadRequest)
+		return
+	}
 
-	_, err = db.Exec("INSERT INTO transactions (account_id, operationType_ID, amount) VALUES (?, ?, ?)", transaction.AccountID, transaction.OperationTypeID, transaction.Amount)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

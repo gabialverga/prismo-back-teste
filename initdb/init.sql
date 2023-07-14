@@ -1,6 +1,7 @@
 CREATE TABLE accounts (
   account_id INT AUTO_INCREMENT PRIMARY KEY,
-  document_number VARCHAR(20) NOT NULL UNIQUE
+  document_number VARCHAR(20) NOT NULL UNIQUE,
+  avaliable_credit_limit FLOAT NOT NULL
 );
 
 CREATE TABLE operationTypes (
