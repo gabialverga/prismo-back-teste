@@ -54,14 +54,14 @@ Aqui esta o passo a passo de como fazer o deploy da aplicação:
 
 - **Parar um container**
 
-    Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
+    Pode receber os valores de 'db' ou 'back' ou ficar vazio para parar todos os containers
   ```
   make down s=<nome>
   ```
 
 - **Acessar um container**
 
-    Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
+    Pode receber os valores de 'db' ou 'back'
   ```
   make exec s=<nome>
   ```
