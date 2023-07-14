@@ -19,9 +19,10 @@ Aqui esta o passo a passo de como fazer o deploy da aplicação:
 
     Variaveis:
     
-    - **MYSQL_USER**: Nome de utilizador da base de dados. Deve ser o mesmo utilizado no ficheiro backend init.sql.
-    - **MYSQL_PASSWORD**: Palavra-passe da base de dados.
+    - **MYSQL_USER**: Nome de utilizador da base de dados.
+    - **MYSQL_PASSWORD**: Senha do usuário da base de dados.
     - **MYSQL_DATABASE**: Nome da base de dados.
+    - **MYSQL_ROOT_PASSWORD**: Senha da base de dados.
 
 2.  Build
 
@@ -38,22 +39,25 @@ Aqui esta o passo a passo de como fazer o deploy da aplicação:
 ### Comandos extras
 
 - Iniciar apenas um serviço
-    Pode receber os valores de 'db' ou 'backend'
-
+    Pode receber os valores de 'db' ou 'back'
   ```
   make up s=<nome>
   ```
 
-- Ver logs
-    Caso queira ver os logs de um container em específico adicionando `s=<nome>`, nome pode ser 'db' ou 'backend'
-
+- Ver logs dos containers 
+    Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
   ```
-  make logs
+  make logs s=<nome>
   ```
 
-- Stop
-    Caso queira ver os logs de um container em específico adicionando `s=<nome>`, nome pode ser 'db' ou 'backend'
-
+- Parar um container
+    Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
   ```
-  make down
+  make down s=<nome>
+  ```
+
+- Acessar um container
+    Pode receber os valores de 'db' ou 'back' ou ficar vazio para retornar os logs de todos os containers
+  ```
+  make exec s=<nome>
   ```
