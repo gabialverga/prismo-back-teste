@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -28,8 +29,11 @@ type Transaction struct {
 var db *sql.DB
 
 func main() {
+	dbURL := os.Getenv("DATABASE_URL")
+
 	var err error
-	db, err = sql.Open("mysql", "example_user:example_password@tcp(db:3306)/example_db")
+	db, err = sql.Open("mysql", dbURL)
+
 	if err != nil {
 		log.Fatal(err)
 	}
